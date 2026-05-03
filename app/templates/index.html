@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>API Backend Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f8; color: #333; margin: 40px; }
+        h1 { color: #2c3e50; }
+        ul { line-height: 1.8; }
+        li code { background-color: #e8e8e8; padding: 3px 5px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>API Backend Login</h1>
+    <p>Rutas disponibles en el backend:</p>
+    <p><code>http://127.0.0.1:5000/</code> Ruta base</p>
+    <ul>
+        <li><code>POST /register</code>  Crear nuevo usuario</li>
+        <li><code>POST /login</code>  Iniciar sesión (devuelve token JWT)</li>
+        <li><code>GET /profile</code>  Ver perfil (requiere token)</li>
+        <li><code>GET /users</code>  Listar usuarios (requiere token)</li>
+    </ul>
+    <p>Base de datos: <b>usermodule.db</b></p>
+</body>
+</html>
