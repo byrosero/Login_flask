@@ -74,3 +74,53 @@ def get_users():
         {"id": u.id, "username": u.username, "email": u.email}
         for u in users
     ])
+
+
+# Editar usuario
+@api.route('/users/<int:user_id>', methods=['PUT'])
+@jwt_required()
+def update_user(user_id):
+    data = request.get_json()
+    user = User.query.get(user_id)
+
+    if not user:
+        return jsonify({"message": "Usuario no encontrado"}), 404
+
+    # Actualizar campos si se proporcionan
+    if "username" in data:
+        # Verificar si el nuevo username ya existe (y no es el del usuario actual)
+        existing_user = User.query.filter_by(username=data["username"]).first()
+        if existing_user and existing_user.id != user_id:
+            return jsonify({"error": "Nombre de usuario ya en uso"}), 409
+        user.username = data["username"]
+
+    if "email" in data:
+        existing_email = User.query.filter_by(email=data["email"]).first()
+        if existing_email and existing_email.id != user_id:
+            return jsonify({"error": "Email ya en uso"}), 409
+        user.email = data["email"]
+
+    if "password" in data:
+        user.password = generate_password_hash(data["password"])
+
+    db.session.commit()
+
+    return jsonify({
+        "message": f"Usuario {user_id} actualizado con éxito",
+        "user": {"id": user.id, "username": user.username, "email": user.email}
+    }), 200
+
+
+# Eliminar usuario
+@api.route('/users/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    user = User.query.get(user_id)
+
+    if not user:
+        return jsonify({"message": "Usuario no encontrado"}), 404
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({"message": f"Usuario {user_id} eliminado con éxito"}), 200
